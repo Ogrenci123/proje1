@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özel Tasarım</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #container {
+            display: flex;
+            height: 100vh;
+        }
+
+        #left-region {
+            flex: 5;
+            background-color: #BFBFBF;
+            position: relative;
+        }
+
+        #middle-region {
+            flex: 21;
+            background-color: #FFFFFF;
+        }
+
+        #right-region {
+            flex: 6;
+            background-color: #595959;
+            border-left: 1px solid black; /* Sol kenarlık */
+            border-bottom: 1px solid black; /* Alt kenarlık */
+        }
+
+        #clickable-lines {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1; /* Popup'un önünde olmasını sağlar */
+        }
+
+        #clickable-lines span {
+            display: block;
+            width: 20px;
+            height: 4px;
+            background-color: black;
+            margin-bottom: 4px;
+            transition: background-color 0.3s ease; /* Hover efekti için geçiş efekti */
+        }
+
+        #clickable-lines:hover span {
+            background-color: #3498db; /* Hover rengi */
+        }
+
+        #popup {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: -100px; /* Popup'ın sağ kenara olan mesafesi */
+            width: 100px;
+            height: 40px;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center; /* Yazıları ortala */
+            z-index: 2; /* Cizgilerin üzerinde olmasını sağlar */
+        }
+
+        .popup-content {
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease; /* Renk değişimini yumuşatmak için geçiş efekti */
+        }
+
+        .popup-content:hover {
+            color: #3498db; /* Hover rengi */
+        }
+
+        #dynamic-popup {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Popup'ı dikey ve yatay ortala */
+            width: 400px;
+            height: 400px;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center; /* Yazıları ortala */
+            z-index: 3; /* Diğer elementlerin üzerinde olmasını sağlar */
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="left-region">
+            <div id="clickable-lines" onmouseover="openPopup()" onmouseleave="closePopupWithDelay()" onclick="togglePopup(event)">
+                <!-- Sağ üst köşeye çizgiler buraya gelecek -->
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="popup" onmouseover="cancelClosePopup()" onmouseleave="closePopupWithDelay()" onclick="closePopup(event)">
+                <!-- Pencere İçeriği Buraya Gelecek -->
+                <div class="popup-content" onclick="openDynamicPopup()">Edit Profile</div>
+                <div class="popup-content" onclick="openProfilePage()">My Profile</div>
+            </div>
+        </div>
+        <div id="middle-region">
+            <!-- Orta Bölge İçeriği Buraya Gelecek -->
+        </div>
+        <div id="right-region">
+            <!-- Sağ Bölge İçeriği Buraya Gelecek -->
+        </div>
+    </div>
+
+    <div id="dynamic-popup">
+        <div class="popup-content">
+            İçerik Buraya Gelecek
+        </div>
+    </div>
+
+    <script>
+        var closePopupTimeout;
+
+        function togglePopup(event) {
+            event.stopPropagation();
+            var popup = document.getElementById("popup");
+            popup.style.display = popup.style.display === "none" ? "block" : "none";
+        }
+
+        function openPopup() {
+            var popup = document.getElementById("popup");
+            popup.style.display = "block";
+        }
+
+        function closePopup(event) {
+            event.stopPropagation();
+            var popup = document.getElementById("popup");
+            popup.style.display = "none";
+        }
+
+        function openDynamicPopup() {
+            var dynamicPopup = document.getElementById("dynamic-popup");
+            dynamicPopup.style.display = "block";
+        }
+
+        function openProfilePage() {
+            window.location.href = "profile.html";
+        }
+
+        function cancelClosePopup() {
+            clearTimeout(closePopupTimeout);
+        }
+
+        function closePopupWithDelay() {
+            closePopupTimeout = setTimeout(function() {
+                var popup = document.getElementById("popup");
+                popup.style.display = "none";
+            }, 100); // 1 saniye gecikme
+        }
+
+        // Dışında bir yere tıklandığında popup'ları kapat
+        window.addEventListener("click", function() {
+            var popup = document.getElementById("popup");
+            popup.style.display = "none";
+
+            var dynamicPopup = document.getElementById("dynamic-popup");
+            dynamicPopup.style.display = "none";
+        });
+    </script>
+</body>
+</html>
